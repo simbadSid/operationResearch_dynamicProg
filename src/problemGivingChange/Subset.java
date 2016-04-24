@@ -3,10 +3,6 @@ package problemGivingChange;
 import java.util.LinkedList;
 
 
-
-
-
-
 public class Subset
 {
 // -----------------------------------------------
@@ -57,7 +53,7 @@ public class Subset
 
 		for (Integer i: totalElem)
 		{
-			if (elem == i)
+			if ((elem == i) && (!found))
 			{
 				found = true;
 				res.elementIn.add(elem);
@@ -81,7 +77,7 @@ public class Subset
 	{
 		Subset res = new Subset(subset);
 
-		removeFromList(res.elementOut, newElem);
+		isInList(res.elementOut, newElem, true, true);
 		res.elementIn.add(newElem);
 		res.sum += newElem;
 		return res;
@@ -100,25 +96,69 @@ public class Subset
 		return this.elementOut;
 	}
 
+	public static void addUnicToList(LinkedList<Subset> subsetList, Subset toAdd)
+	{
+		for(Subset o: subsetList)
+		{
+			if (o.equals(toAdd))
+			{
+				return;
+			}
+		}
+		subsetList.add(toAdd);
+	}
+
 	public String toString()
 	{
 		String res = this.elementIn.toString();
+
 		return res;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+// TODO to improve
+		Subset s = (Subset) obj;
+		if (this.sum != s.sum)
+		{
+			return false;
+		}
+		if (this.elementOut.size() != s.elementOut.size())
+		{
+			return false;
+		}
+		for (int elem: this.elementOut)
+		{
+			if (!isInList(s.elementOut, elem, false, false))
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 // -----------------------------------------------
 // Auxiliary methods
 // -----------------------------------------------
-	private static void removeFromList(LinkedList<Integer> list, int toRemove)
+	private static boolean isInList(LinkedList<Integer> list, int toCheck, boolean remove, boolean throwExceptionIfNot)
 	{
 		for(int i=0; i<list.size(); i++)
 		{
-			if (list.get(i) == toRemove)
+			if (list.get(i) == toCheck)
 			{
-				list.remove(i);
-				return;
+				if (remove)
+				{
+					list.remove(i);
+				}
+				return true;
 			}
 		}
-		throw new RuntimeException();
+		if (throwExceptionIfNot)
+		{
+			throw new RuntimeException();
+		}
+		return false;
 	}
 }
