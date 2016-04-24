@@ -76,17 +76,24 @@ System.out.println("Out of order: " + newSubset);
 // -----------------------------------------------
 // Auxiliary methods
 // -----------------------------------------------
-	private static void removeFromList(LinkedList<Integer> list, int toRemove)
+	private static boolean isInList(LinkedList<Integer> list, int toCheck, boolean remove, boolean throwExceptionIfNot)
 	{
 		for(int i=0; i<list.size(); i++)
 		{
-			if (list.get(i) == toRemove)
+			if (list.get(i) == toCheck)
 			{
-				list.remove(i);
-				return;
+				if (remove)
+				{
+					list.remove(i);
+				}
+				return true;
 			}
 		}
-		throw new RuntimeException();
+		if (throwExceptionIfNot)
+		{
+			throw new RuntimeException();
+		}
+		return false;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -179,7 +186,7 @@ public static class Subset
 	{
 		Subset res = new Subset(subset);
 
-		removeFromList(res.elementOut, newElem);
+		isInList(res.elementOut, newElem, true, true);
 		res.elementIn.add(newElem);
 		res.sum += newElem;
 		return res;
@@ -202,6 +209,28 @@ public static class Subset
 	{
 		String res = this.elementIn.toString();
 		return res;
+	}
+
+	public boolean equals(Subset obj)
+	{
+// TODO to improve
+		if (this.sum != obj.sum)
+		{
+			return false;
+		}
+		if (this.elementOut.size() != obj.elementOut.size())
+		{
+			return false;
+		}
+		for (int elem: this.elementOut)
+		{
+			if (!isInList(obj.elementOut, elem, false, false))
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
 
