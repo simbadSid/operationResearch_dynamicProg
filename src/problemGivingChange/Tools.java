@@ -42,7 +42,7 @@ public class Tools
 				return true;
 			}
 			Subset subset = Subset.create(elem, X, E);
-			subsetList.add(subset);
+			addUnicToList(subsetList, subset);
 		}
 
 System.out.println("Initial: " + subsetList);
@@ -73,6 +73,38 @@ System.out.println("Out of order: " + newSubset);
 		return false;
 	}
 
+// -----------------------------------------------
+// Auxiliary methods
+// -----------------------------------------------
+	private static void removeFromList(LinkedList<Integer> list, int toRemove)
+	{
+		for(int i=0; i<list.size(); i++)
+		{
+			if (list.get(i) == toRemove)
+			{
+				list.remove(i);
+				return;
+			}
+		}
+		throw new RuntimeException();
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static void addUnicToList(LinkedList subsetList, Object toAdd)
+	{
+		for(Object o: subsetList)
+		{
+			if (o.equals(toAdd))
+			{
+				return;
+			}
+		}
+		subsetList.add(toAdd);
+	}
+
+// -----------------------------------------------
+// Auxiliary class
+// -----------------------------------------------
 public static class Subset
 {
 // -----------------------------------------------
@@ -170,22 +202,6 @@ public static class Subset
 	{
 		String res = this.elementIn.toString();
 		return res;
-	}
-
-// -----------------------------------------------
-// Auxiliary methods
-// -----------------------------------------------
-	private static void removeFromList(LinkedList<Integer> list, int toRemove)
-	{
-		for(int i=0; i<list.size(); i++)
-		{
-			if (list.get(i) == toRemove)
-			{
-				list.remove(i);
-				return;
-			}
-		}
-		throw new RuntimeException();
 	}
 }
 
